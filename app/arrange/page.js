@@ -4,7 +4,6 @@ import { useState, useEffect, useRef } from "react";
 import Image from "next/image";
 import { motion } from "framer-motion";
 import { useRouter } from "next/navigation";
-import domtoimage from "dom-to-image-more";
 import styles from "./arrange.module.css";
 import { useBouquet } from "../context/BouquetContext";
 
@@ -81,21 +80,22 @@ export default function ArrangeFlowers() {
 
   // ─── Capture snapshot & navigate ───
   const handleNext = async () => {
-    console.log('[app/arrange] -> handleNext Called');
     if (!canvasRef.current) return;
 
     setIsCapturing(true);
     setArrangedFlowers(arranged);
 
     try {
+      const domtoimage = (await import('dom-to-image-more')).default;
+
       const dataUrl = await domtoimage.toPng(canvasRef.current, {
         width: 420,
         height: 510,
         bgcolor: 'transparent',
         style: { transform: 'none', left: '0', top: '0' }
       });
+
       setBouquetImage(dataUrl);
-      console.log('[app/arrange] -> handleNext Success');
       router.push('/message');
     } catch (err) {
       console.error("Capture failed:", err);
