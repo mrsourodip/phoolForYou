@@ -1,34 +1,18 @@
+@import url('https://fonts.googleapis.com/css2?family=Outfit:wght@300;400;500;600;700;800&family=Playfair+Display:ital,wght@0,400;0,600;1,400&display=swap');
+
 :root {
-  --background: #ffffff;
-  --foreground: #171717;
-}
+  /* Digibouquet Artisan Minimalist Palette */
+  --bg-color: #F5F4EC; /* Cream paper background */
+  --text-primary: #111111; /* Very dark grey / black */
+  --text-secondary: #4A4A4A;
+  
+  --primary-color: #000000;
+  
+  --card-bg: transparent; /* No more glass cards */
 
-@media (prefers-color-scheme: dark) {
-  :root {
-    --background: #0a0a0a;
-    --foreground: #ededed;
-  }
-}
-
-html {
-  height: 100%;
-}
-
-html,
-body {
-  max-width: 100vw;
-  overflow-x: hidden;
-}
-
-body {
-  min-height: 100%;
-  display: flex;
-  flex-direction: column;
-  color: var(--foreground);
-  background: var(--background);
-  font-family: Arial, Helvetica, sans-serif;
-  -webkit-font-smoothing: antialiased;
-  -moz-osx-font-smoothing: grayscale;
+  /* Micro animations */
+  --transition-fast: 0.15s ease-out;
+  --transition-smooth: 0.4s cubic-bezier(0.16, 1, 0.3, 1);
 }
 
 * {
@@ -37,13 +21,163 @@ body {
   margin: 0;
 }
 
+html,
+body {
+  max-width: 100vw;
+  overflow-x: hidden;
+  min-height: 100vh;
+}
+
+body {
+  font-family: 'Outfit', sans-serif;
+  color: var(--text-primary);
+  background-color: var(--bg-color);
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+}
+
+h1, h2, h3, h4, h5, h6 {
+  font-family: 'Playfair Display', serif;
+  font-weight: 600;
+  color: var(--text-primary);
+  letter-spacing: -0.02em;
+}
+
 a {
   color: inherit;
   text-decoration: none;
 }
 
-@media (prefers-color-scheme: dark) {
-  html {
-    color-scheme: dark;
-  }
+.btn-primary {
+  background: #F48BA0; /* Prominent solid pink */
+  color: white;
+  border: none;
+  font-family: 'Outfit', monospace;
+  font-size: 1.1rem;
+  font-weight: 600;
+  letter-spacing: 0.05em;
+  text-transform: uppercase;
+  white-space: nowrap;
+  padding: 16px 36px;
+  border-radius: 40px; /* Perfect pill shape */
+  cursor: pointer;
+  transition: all 0.3s ease;
+  box-shadow: 0 4px 15px rgba(244, 139, 160, 0.4);
+}
+
+.btn-primary:not(:disabled):hover {
+  background: #DE6D84; /* Deep pink active hover */
+  transform: translateY(-2px);
+  box-shadow: 0 6px 20px rgba(222, 109, 132, 0.6);
+}
+
+.btn-primary:disabled {
+  background: #FDF1F3; /* Very faded/washed out */
+  box-shadow: none;
+  cursor: not-allowed;
+  color: rgba(222, 109, 132, 0.5); /* washed out text */
+}
+
+.btn-back {
+  background: #A3B18A; /* Pastel sage green */
+  color: white;
+  border: none;
+  font-family: 'Outfit', monospace;
+  font-size: 1.1rem;
+  font-weight: 600;
+  letter-spacing: 0.05em;
+  white-space: nowrap;
+  padding: 16px 32px;
+  border-radius: 40px; /* pill shape */
+  cursor: pointer;
+  transition: all 0.3s ease;
+  box-shadow: 0 4px 15px rgba(163, 177, 138, 0.4);
+}
+
+.btn-back:hover {
+  background: #8A9A73;
+  color: white;
+  transform: translateY(-2px);
+  box-shadow: 0 6px 20px rgba(163, 177, 138, 0.6);
+}
+
+/* ─── SECONDARY: Shuffle — pastel blue ─── */
+.btn-secondary {
+  background: #D6E8F5;
+  color: #4A7FA5;
+  border: none;
+  font-family: 'Outfit', sans-serif;
+  font-size: 0.95rem;
+  font-weight: 600;
+  letter-spacing: 0.04em;
+  white-space: nowrap;
+  padding: 14px 28px;
+  border-radius: 40px;
+  cursor: pointer;
+  transition: all 0.25s ease;
+  box-shadow: 0 3px 10px rgba(74, 127, 165, 0.15);
+}
+
+.btn-secondary:hover {
+  background: #B8D4EA;
+  transform: translateY(-2px);
+  box-shadow: 0 5px 16px rgba(74, 127, 165, 0.25);
+}
+
+.btn-secondary:disabled {
+  opacity: 0.45;
+  cursor: not-allowed;
+  transform: none;
+  box-shadow: none;
+}
+
+/* ─── ACCENT: AI Generate — warm peach ─── */
+.btn-accent {
+  background: #FADCB0;
+  color: #9B7230;
+  border: none;
+  font-family: 'Outfit', sans-serif;
+  font-size: 0.95rem;
+  font-weight: 600;
+  letter-spacing: 0.04em;
+  white-space: nowrap;
+  padding: 14px 28px;
+  border-radius: 40px;
+  cursor: pointer;
+  transition: all 0.25s ease;
+  box-shadow: 0 3px 10px rgba(155, 114, 48, 0.12);
+}
+
+.btn-accent:hover {
+  background: #F0CC93;
+  transform: translateY(-2px);
+  box-shadow: 0 5px 16px rgba(155, 114, 48, 0.22);
+}
+
+.btn-accent:disabled {
+  opacity: 0.45;
+  cursor: not-allowed;
+  transform: none;
+  box-shadow: none;
+}
+
+/* ─── DISCARD: Reset — muted coral ─── */
+.btn-discard {
+  background: transparent;
+  color: #C97E6E;
+  border: 1.5px dashed #C97E6E;
+  font-family: 'Outfit', sans-serif;
+  font-size: 0.9rem;
+  font-weight: 600;
+  letter-spacing: 0.04em;
+  white-space: nowrap;
+  padding: 10px 22px;
+  border-radius: 40px;
+  cursor: pointer;
+  transition: all 0.25s ease;
+}
+
+.btn-discard:hover {
+  background: rgba(201, 126, 110, 0.1);
+  transform: translateY(-1px);
 }

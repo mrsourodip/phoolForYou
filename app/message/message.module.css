@@ -1,0 +1,198 @@
+/* ========================================
+   MESSAGE PAGE — 100vh, no scroll
+   Layout: [Left: Card] | [Right: Controls]
+   ======================================== */
+
+.container {
+  height: 100vh;
+  padding: 52px 2rem 1rem 2rem; /* 52px top accounts for global header */
+  max-width: 1200px;
+  margin: 0 auto;
+  display: flex;
+  flex-direction: column;
+  overflow: hidden;
+}
+
+.header {
+  text-align: center;
+  margin-bottom: 1rem;
+  flex-shrink: 0;
+  padding-top: 1rem;
+}
+
+.title {
+  font-size: 2.8rem;
+  font-family: 'Playfair Display', serif;
+  margin-bottom: 0.25rem;
+  color: var(--text-primary);
+  font-weight: 400;
+  font-style: italic;
+}
+
+.subtitle {
+  color: #888;
+  font-family: 'Outfit', sans-serif;
+  font-size: 0.95rem;
+}
+
+/* ---------- MAIN SPLIT ---------- */
+.twoColumnGrid {
+  display: grid;
+  grid-template-columns: 1fr 320px;
+  gap: 3rem;
+  flex: 1;
+  min-height: 0;
+  width: 100%;
+}
+
+.leftCol {
+  display: flex;
+  flex-direction: column;
+  gap: 1rem;
+  min-height: 0;
+}
+
+.rightCol {
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  gap: 1.5rem;
+  overflow-y: auto;
+}
+
+/* ---------- FOOTER NAV ---------- */
+.navRow {
+  display: flex;
+  justify-content: space-between;
+  width: 100%;
+  flex-shrink: 0;
+  padding-top: 1rem;
+}
+
+/* ---------- LABEL ---------- */
+.label {
+  font-weight: 600;
+  color: #555;
+  font-family: 'Outfit', sans-serif;
+  text-transform: uppercase;
+  font-size: 0.85rem;
+  letter-spacing: 0.05em;
+  margin-bottom: 0.5rem;
+}
+
+/* ---------- TINT TOGGLES ---------- */
+.tintToggles {
+  display: flex;
+  gap: 0.75rem;
+}
+
+.colorCircle {
+  width: 30px;
+  height: 30px;
+  border-radius: 50%;
+  border: 1px solid rgba(0,0,0,0.1);
+  cursor: pointer;
+  transition: transform 0.2s;
+  box-shadow: inset 0 2px 4px rgba(0,0,0,0.05);
+}
+
+.colorCircle:hover {
+  transform: scale(1.15);
+}
+
+.colorCircleActive {
+  border: 2.5px solid var(--text-primary);
+  transform: scale(1.15);
+}
+
+/* ---------- CARD ---------- */
+.customCard {
+  flex: 1;
+  min-height: 0;
+  width: 100%;
+  border: 1px solid rgba(0,0,0,0.08);
+  border-radius: 8px;
+  padding: 2rem;
+  transition: background 0.4s ease;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  overflow-y: auto;
+}
+
+.textarea {
+  width: 100%;
+  flex: 1;
+  min-height: 60px;
+  border: none;
+  background: transparent;
+  font-size: 1.2rem;
+  font-family: 'Playfair Display', serif;
+  font-style: italic;
+  resize: none;
+  outline: none;
+  color: var(--text-primary);
+  line-height: 1.6;
+  text-align: center;
+}
+
+.textarea::placeholder {
+  color: rgba(0,0,0,0.25);
+}
+
+/* ---------- CHIPS ---------- */
+.chips {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.5rem;
+}
+
+.chip {
+  padding: 8px 14px;
+  border: none;
+  border-radius: 20px;
+  font-size: 0.82rem;
+  font-family: 'Outfit', sans-serif;
+  color: #444;
+  cursor: pointer;
+  transition: all 0.2s ease;
+  font-weight: 500;
+}
+
+.chip:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 3px 8px rgba(0,0,0,0.08);
+}
+
+/* ---------- AI SECTION ---------- */
+.aiSection {
+  display: flex;
+  flex-direction: column;
+  gap: 0.5rem;
+  background: white;
+  padding: 1.25rem;
+  border: 1.5px solid #e8e8e8;
+  border-radius: 16px;
+}
+
+.aiInput {
+  width: 100%;
+  padding: 12px 16px;
+  border: 1.5px solid #d0d0d0;
+  border-radius: 10px;
+  outline: none;
+  font-family: 'Outfit', sans-serif;
+  font-size: 0.95rem;
+  background: #fafafa;
+  transition: border-color 0.2s;
+  line-height: 1.5;
+}
+
+.aiInput:focus {
+  border-color: #FADCB0;
+}
+
+@keyframes fadeInDown {
+  from { opacity: 0; transform: translateY(-20px); }
+  to { opacity: 1; transform: translateY(0); }
+}

@@ -1,0 +1,266 @@
+.container {
+  min-height: 100vh;
+  padding: 56px 2rem 8rem 2rem; 
+  max-width: 1200px;
+  margin: 0 auto;
+  animation: fadeIn 0.8s var(--transition-smooth);
+}
+
+.header {
+  text-align: center;
+  margin-bottom: 4rem;
+}
+
+.title {
+  font-size: 2.8rem;
+  font-family: 'Playfair Display', serif;
+  margin-bottom: 0.25rem;
+  color: var(--text-primary);
+  font-style: italic;
+  font-weight: 400;
+}
+
+.subtitle {
+  color: #888;
+  font-family: 'Outfit', sans-serif;
+  font-size: 0.95rem;
+}
+
+.grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(220px, 1fr));
+  gap: 2rem;
+}
+
+.card {
+  position: relative;
+  aspect-ratio: 1 / 1.2;
+  background: white;
+  border: 1px solid rgba(0,0,0,0.05);
+  cursor: pointer;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  padding: 1rem;
+  transition: var(--transition-fast);
+}
+
+.selectedCard {
+  border: 1px solid var(--text-primary);
+  background: #FCFCFA;
+}
+
+.card:hover {
+  transform: translateY(-5px);
+  box-shadow: 0 10px 30px rgba(0,0,0,0.05);
+}
+
+.imageContainer {
+  flex-grow: 1;
+  width: 100%;
+  position: relative;
+  margin-bottom: 1rem;
+  overflow: hidden;
+}
+
+.image {
+  object-fit: contain;
+  transition: transform 0.4s ease, opacity 0.4s ease;
+  z-index: 1;
+}
+
+.traitOverlay {
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background: rgba(245, 244, 236, 0.9);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  opacity: 0;
+  transition: opacity 0.4s ease;
+  z-index: 2;
+  padding: 1rem;
+  text-align: center;
+}
+
+.traitText {
+  font-family: 'Playfair Display', serif;
+  font-style: italic;
+  font-size: 1.1rem;
+  color: var(--text-primary);
+  transform: translateY(10px);
+  transition: transform 0.4s ease;
+}
+
+.card:hover .image {
+  transform: scale(1.1);
+  opacity: 0.3;
+}
+
+.card:hover .traitOverlay {
+  opacity: 1;
+}
+
+.card:hover .traitText {
+  transform: translateY(0);
+}
+
+.cardFooter {
+  width: 100%;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  height: 36px;
+}
+
+.flowerName {
+  font-family: 'Outfit', monospace;
+  font-size: 0.8rem;
+  font-weight: 500;
+  color: var(--text-primary);
+  text-transform: uppercase;
+  letter-spacing: 0.1em;
+}
+
+.counterPill {
+  display: flex;
+  align-items: center;
+  background: var(--text-primary);
+  border-radius: 20px;
+  overflow: hidden;
+  height: 30px;
+}
+
+.counterBtn {
+  background: transparent;
+  color: white;
+  border: none;
+  font-family: 'Outfit', monospace;
+  font-size: 1rem;
+  width: 28px;
+  height: 100%;
+  cursor: pointer;
+  outline: none;
+  transition: background 0.2s;
+}
+
+.counterBtn:hover {
+  background: rgba(255,255,255,0.2);
+}
+
+.counterValue {
+  color: white;
+  font-family: 'Outfit', monospace;
+  font-weight: 500;
+  font-size: 0.85rem;
+  padding: 0 4px;
+  min-width: 16px;
+  text-align: center;
+}
+
+.addInitialBtn {
+  background: transparent;
+  border: 1px solid var(--text-primary);
+  color: var(--text-primary);
+  width: 30px;
+  height: 30px;
+  border-radius: 50%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 1.2rem;
+  cursor: pointer;
+  transition: var(--transition-fast);
+}
+
+.addInitialBtn:hover {
+  background: var(--text-primary);
+  color: white;
+}
+
+
+/* Minimal Sticky Bottom Bar */
+.bottomBar {
+  position: fixed;
+  bottom: 0;
+  left: 0;
+  width: 100%;
+  background: var(--bg-color);
+  border-top: 1px solid var(--text-primary);
+  padding: 1.5rem 2rem;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  z-index: 100;
+  transform: translateY(100%);
+  animation: slideUp 0.6s cubic-bezier(0.16, 1, 0.3, 1) forwards;
+}
+
+.barLeft {
+  display: flex;
+  align-items: center;
+  gap: 2rem;
+}
+
+.barTitle {
+  font-family: 'Playfair Display', serif;
+  font-size: 1.5rem;
+  font-weight: 600;
+  color: var(--text-primary);
+}
+
+.selectedStack {
+  display: flex;
+  gap: 0.5rem;
+}
+
+.miniThumb {
+  width: 50px;
+  height: 50px;
+  position: relative;
+  background: white;
+  border: 1px solid var(--text-primary);
+  border-radius: 0;
+  overflow: hidden;
+}
+
+.miniImage {
+  object-fit: cover;
+}
+
+.miniCount {
+  position: absolute;
+  top: 0;
+  right: 0;
+  background: var(--text-primary);
+  color: white;
+  min-width: 18px;
+  height: 18px;
+  font-size: 0.70rem;
+  font-family: 'Outfit', monospace;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 0 4px;
+}
+
+@keyframes fadeIn {
+  from { opacity: 0; }
+  to { opacity: 1; }
+}
+
+@keyframes slideUp {
+  from { transform: translateY(100%); }
+  to { transform: translateY(0); }
+}
+
+@media (max-width: 768px) {
+  .bottomBar {
+    flex-direction: column;
+    gap: 1.5rem;
+    padding: 1.5rem;
+  }
+}
