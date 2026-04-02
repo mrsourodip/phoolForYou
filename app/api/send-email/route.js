@@ -23,7 +23,7 @@ export async function POST(req) {
     }
 
     const { data, error } = await resend.emails.send({
-      from: `FoolForYou Digital Florist <onboarding@resend.dev>`, 
+      from: "Phool4u<hello@phool4u.in>",
       to: [recipientEmail],
       subject: `A handcrafted digital bouquet from ${senderName} 💐`,
       html: `
