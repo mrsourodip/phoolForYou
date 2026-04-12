@@ -25,15 +25,33 @@ export default function ArrangeFlowers() {
     selectedFlowers,
     arrangedFlowers,
     setArrangedFlowers,
-    selectedGreeneryBase,
+
     setSelectedGreeneryBase,
-    setBouquetImage
+    setBouquetImage,
+    selectedGreeneryBase,
+    removeFlower
   } = useBouquet();
 
   const [arranged, setArranged] = useState([]);
   const [isCapturing, setIsCapturing] = useState(false);
   const [showTutorial, setShowTutorial] = useState(true);
+  const [stageScale, setStageScale] = useState(1);
   const canvasRef = useRef(null);
+
+  useEffect(() => {
+    const handleResize = () => {
+      if (window.innerWidth < 480) {
+        setStageScale((window.innerWidth - 40) / 420);
+      } else if (window.innerWidth < 768) {
+        setStageScale((window.innerWidth - 80) / 420);
+      } else {
+        setStageScale(1);
+      }
+    };
+    handleResize();
+    window.addEventListener('resize', handleResize);
+    return () => window.removeEventListener('resize', handleResize);
+  }, []);
 
   // ─── Mount: restore previous arrangement or scatter fresh ───
   useEffect(() => {
@@ -49,9 +67,8 @@ export default function ArrangeFlowers() {
       doShuffle();
     }
 
-    // Tutorial auto-dismiss
-    const timer = setTimeout(() => setShowTutorial(false), 2500);
-    return () => clearTimeout(timer);
+    // Tutorial auto-dismiss on mount is now replaced by interaction dismissal
+    return () => {};
   }, []);
 
   // ─── Shuffle: polar coordinate scatter ───
@@ -105,9 +122,46 @@ export default function ArrangeFlowers() {
     setIsCapturing(false);
   };
 
-  // ─── Drag end handler ───
+  // ─── Drag handlers ───
+  const onPointerDown = (flowerId) => {
+    // Dismiss tutorial on first interaction
+    if (showTutorial) setShowTutorial(false);
+    
+    // Bring the flower to the top by maximizing its Z
+    setArranged(prev => {
+      const maxZ = Math.max(...prev.map(f => f.position.z), 10);
+      return prev.map(f => {
+        if ((f.uid || f.id) === flowerId) {
+          return { ...f, position: { ...f.position, z: maxZ + 1 } };
+        }
+        return f;
+      });
+    });
+  };
+
   const onFlowerDragEnd = (flowerId, info) => {
-    console.log('[app/arrange] -> onFlowerDragEnd');
+    // Check if we dropped over the "Stand" (bottom right area)
+    // Canvas: 420x510. Top left of canvas is at 0,0 relative to its container.
+    // However, flower positions are tracked relative to their "left: 120, top: 165" starting point.
+    // The Stand is roughly at x: 300+, y: 400+ relative to the canvas origin.
+
+    const finalX = info.point.x;
+    const finalY = info.point.y;
+
+    // Simplest detection: check the info.offset or just the local position within the canvas
+    const x = arranged.find(f => (f.uid || f.id) === flowerId)?.position.x + info.offset.x;
+    const y = arranged.find(f => (f.uid || f.id) === flowerId)?.position.y + info.offset.y;
+
+    // The Stand is roughly at local coordinates (x > 80, y > 150) given starting (0,0) is center
+    // Let's use a simpler check: if it's in the bottom right 100px of the 420x510 canvas
+    if (x > 100 && y > 140) {
+      // Remove it!
+      // Animate out is handled by the presence of the flower in the set
+      removeFlower(flowerId);
+      setArranged(prev => prev.filter(f => (f.uid || f.id) !== flowerId));
+      return;
+    }
+
     setArranged(prev =>
       prev.map(f => {
         if ((f.uid || f.id) === flowerId) {
@@ -162,19 +216,50 @@ export default function ArrangeFlowers() {
             </div>
           </div>
 
+          <button
+            id="add-blooms-btn"
+            className="btn-secondary"
+            onClick={() => router.push('/select')}
+            style={{ width: '100%' }}
+          >
+            Add More Blooms
+          </button>
+
           <button id="shuffle-btn" className="btn-secondary" onClick={doShuffle} style={{ width: '100%' }}>
-            🔀 Shuffle
+            Shuffle Arrangement
           </button>
         </div>
 
         {/* RIGHT: The Canvas */}
         <div className={styles.canvasCol}>
-          <div className={styles.canvas} ref={canvasRef}>
+          <div 
+            className={styles.canvas} 
+            ref={canvasRef}
+            style={{ transform: `scale(${stageScale})` }}
+          >
 
             {/* Tutorial overlay */}
             {showTutorial && (
               <div className={styles.tutorialOverlay}>
-                <div className={styles.handEmoji}>👆</div>
+                <motion.div 
+                  className={styles.tutorialHint}
+                  initial={{ opacity: 0, scale: 0.8 }}
+                  animate={{ 
+                    opacity: [0, 1, 1, 0],
+                    scale: [0.8, 1, 1, 0.8],
+                    x: [0, 80, 80, 80]
+                  }}
+                  transition={{ 
+                    duration: 3, 
+                    repeat: Infinity,
+                    times: [0, 0.2, 0.8, 1]
+                  }}
+                >
+                  <div className={styles.ripple} />
+                  <span className={styles.hintText}>
+                    {stageScale < 1 ? "TAP & HOLD TO DRAG" : "DRAG TO ARRANGE"}
+                  </span>
+                </motion.div>
               </div>
             )}
 
@@ -191,17 +276,7 @@ export default function ArrangeFlowers() {
               </div>
             )}
 
-            {/* Baby's breath filler — only with greenery */}
-            {hasGreenery && (
-              <div className={styles.fillerLayer}>
-                <Image
-                  src="/assets/filler_babys_breath.png"
-                  alt="Baby's Breath"
-                  fill
-                  style={{ objectFit: 'contain' }}
-                />
-              </div>
-            )}
+
 
             {/* Draggable flowers */}
             {arranged.map(flower => {
@@ -209,52 +284,74 @@ export default function ArrangeFlowers() {
               return (
                 <motion.div
                   key={id}
-                  className={`${styles.flowerLayer} ${hasGreenery ? styles.maskedFlower : ''}`}
+                  className={styles.flowerLayer}
                   drag
                   dragMomentum={false}
-                  whileDrag={{ scale: 1.1, zIndex: 100 }}
+                  dragElastic={0.1}
+                  whileDrag={{
+                    scale: 1.3,
+                    cursor: 'grabbing',
+                    filter: 'drop-shadow(0 20px 30px rgba(0,0,0,0.2))'
+                  }}
+                  onPointerDown={() => onPointerDown(id)}
                   onDragEnd={(e, info) => onFlowerDragEnd(id, info)}
                   initial={{
                     x: flower.position.x,
                     y: flower.position.y,
                     scale: flower.position.scale,
-                    rotate: flower.position.rot
+                    rotate: flower.position.rot,
+                    opacity: 1
                   }}
                   animate={{
                     x: flower.position.x,
                     y: flower.position.y,
                     scale: flower.position.scale,
-                    rotate: flower.position.rot
+                    rotate: flower.position.rot,
+                    opacity: 1
                   }}
-                  transition={{ type: "spring", stiffness: 100, damping: 15 }}
+                  exit={{ 
+                    x: 130, 
+                    y: 150, 
+                    scale: 0.2, 
+                    opacity: 0,
+                    rotate: 15,
+                    transition: { duration: 0.4, ease: "easeIn" } 
+                  }}
+                  transition={{ type: "spring", stiffness: 120, damping: 20 }}
                   style={{
                     zIndex: flower.position.z,
-                    width: '180px',
-                    height: '180px',
-                    left: '120px',
-                    top: '165px',
+                    left: '175px',
+                    top: '220px',
                     cursor: 'grab'
                   }}
                 >
                   <Image
+                    className={hasGreenery ? styles.maskedFlower : ''}
                     src={flower.image}
                     alt={flower.name}
-                    fill
+                    width={120}
+                    height={120}
                     style={{ objectFit: 'contain', pointerEvents: 'none' }}
-                    sizes="180px"
                     draggable={false}
                   />
                 </motion.div>
               );
             })}
+
+            {/* The Flower Stand (Removal Zone) - Hide during capture */}
+            {!isCapturing && (
+              <div className={styles.flowerStand}>
+                <div className={styles.standIcon}>🧺</div>
+                <div className={styles.standLabel}>Stand</div>
+              </div>
+            )}
           </div>
         </div>
       </div>
 
-      {/* ─── FOOTER NAV ─── */}
       <div className={styles.footer}>
         <button id="nav-back-arrange" className="btn-back" onClick={() => router.push('/select')}>
-          ← Garden
+          Back to Garden
         </button>
         <button
           id="nav-next-arrange"
@@ -262,7 +359,7 @@ export default function ArrangeFlowers() {
           onClick={handleNext}
           disabled={isCapturing}
         >
-          {isCapturing ? "Tying..." : "Tie Ribbon 🎀"}
+          {isCapturing ? "Tying..." : "Tie Ribbon"}
         </button>
       </div>
     </div>

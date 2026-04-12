@@ -16,32 +16,41 @@ export async function POST(request) {
   try {
     const body = await request.json();
     const prompt = body?.prompt || '';
-    
+
     // Fallback if API key is not mapped in environment variables yet
     if (!ai || !process.env.GEMINI_API_KEY) {
       console.warn("MOCK AI TRIGGERED: GEMINI_API_KEY not found in .env.local");
       await new Promise(resolve => setTimeout(resolve, 800));
       console.log('[api/generate-caption] -> POST Exited (Mocked)');
-      return NextResponse.json({ 
-        caption: "Waiting for your Gemini API Key in .env to spark real magic! ✨" 
+      return NextResponse.json({
+        caption: "Waiting for your Gemini API Key in .env to spark real magic! ✨"
       });
     }
 
     // Hit the incredibly fast gemini-2.5-flash model
     const response = await ai.models.generateContent({
       model: 'gemini-2.5-flash',
-      contents: `You are an expert florist and romantic poet. Write a single-sentence or very short, beautiful, playful flower delivery 
-      message based strictly on the user's incoming mood. 
-      Output ONLY the message itself. No quotes around it, no commentary, directly output the pure generated text.
-      User mood: ${prompt}`,
+      contents: `You are a witty, warm florist who texts like a good friend — 
+  modern, genuine, occasionally playful. Never poetic or old-fashioned.
+  Write one short flower delivery message (max 2 sentences) based on the user's mood below.
+  
+  Rules:
+  - Sound like a real person, not a greeting card
+  - Use casual, conversational english — contractions are fine (you're, they'll, it's)
+  - Light humour is welcome, but never cheesy or cringe
+  - No floral metaphors unless they're ironic
+  - No "may your day bloom" or anything Shakespearean
+  - Output ONLY the message. No quotes, no labels, no commentary.
+  
+  User mood: ${prompt}`,
     });
-    
+
     // Grab the direct text node returned
     const caption = response.text.trim().replace(/^["']|["']$/g, '');
-    
+
     console.log('[api/generate-caption] -> POST Exited (Success)');
     return NextResponse.json({ caption });
-    
+
   } catch (error) {
     console.error("Gemini API Error:", error);
     console.log('[api/generate-caption] -> POST Exited (Error)');

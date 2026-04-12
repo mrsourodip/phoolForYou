@@ -10,6 +10,13 @@
   animation: fadeInDown 0.8s var(--transition-smooth);
 }
 
+@media (max-width: 768px) {
+  .container {
+    padding: 64px 1rem 2rem 1rem;
+    justify-content: flex-start;
+  }
+}
+
 .header {
   text-align: center;
   margin-bottom: 3rem;
@@ -19,9 +26,18 @@
   font-size: 2.8rem;
   font-family: 'Playfair Display', serif;
   margin-bottom: 0.25rem;
-  color: var(--text-primary);
+  color: var(--brand-accent);
   font-weight: 400;
   font-style: italic;
+}
+
+@media (max-width: 768px) {
+  .title {
+    font-size: 2.2rem;
+  }
+  .header {
+    margin-bottom: 2rem;
+  }
 }
 
 .subtitle {
@@ -34,13 +50,21 @@
 
 .card {
   width: 100%;
-  background: white;
-  border: 1px solid var(--text-primary);
-  border-radius: 0;
+  background: var(--card-bg);
+  border: 1px solid rgba(0,0,0,0.05);
+  border-radius: 8px;
   padding: 2.5rem;
   display: flex;
   flex-direction: column;
   gap: 1.5rem;
+  box-shadow: 0 4px 20px rgba(0,0,0,0.02);
+}
+
+@media (max-width: 768px) {
+  .card {
+    padding: 1.5rem;
+    gap: 1rem;
+  }
 }
 
 .inputGroup {
@@ -61,52 +85,52 @@
 .input {
   width: 100%;
   padding: 14px 18px;
-  border-radius: 0;
-  border: 1px solid var(--text-primary);
+  border-radius: 8px;
+  border: 1px solid #D3D1C7;
   font-size: 1.1rem;
   font-family: inherit;
   outline: none;
-  background: transparent;
-  transition: var(--transition-fast);
+  background: #F1EFE8;
+  transition: all var(--transition-smooth);
   color: var(--text-primary);
 }
 
 .input:focus {
-  outline: 2px solid var(--primary-color);
+  border-color: var(--brand-accent);
+  background: white;
+  box-shadow: 0 0 0 4px rgba(212, 83, 126, 0.05);
 }
 
 .btnSubmit {
-  background: #F48BA0;
-  color: white;
+  background: var(--btn-primary-bg);
+  color: var(--btn-primary-text);
   border: none;
   padding: 16px;
-  border-radius: 40px;
+  border-radius: 8px;
   font-family: 'Outfit', sans-serif;
   text-transform: uppercase;
-  font-weight: 600;
-  letter-spacing: 0.05em;
+  font-weight: 500;
+  letter-spacing: 0.04em;
   font-size: 1rem;
   cursor: pointer;
   margin-top: 1rem;
-  transition: all 0.3s ease;
+  transition: all var(--transition-smooth);
   display: flex;
   justify-content: center;
   align-items: center;
   gap: 10px;
-  box-shadow: 0 4px 15px rgba(244, 139, 160, 0.4);
 }
 
 .btnSubmit:disabled {
-  background: #FDF1F3;
-  color: rgba(222, 109, 132, 0.5);
-  box-shadow: none;
+  background: #D3D1C7;
+  color: #888780;
   cursor: not-allowed;
 }
 
 .btnSubmit:hover:not(:disabled) {
-  background: #DE6D84;
+  background: #993556;
   transform: translateY(-2px);
-  box-shadow: 0 6px 20px rgba(222, 109, 132, 0.6);
+  box-shadow: 0 10px 25px rgba(114, 36, 62, 0.15);
 }
 
 /* Success Screen Styles */

@@ -43,6 +43,23 @@ export default function SendScreen() {
       });
 
       if (res.ok) {
+        // --- Persistence to Supabase ---
+        try {
+          await fetch('/api/bouquets', {
+            method: 'POST',
+            headers: { 'Content-Type': 'application/json' },
+            body: JSON.stringify({
+              image: bouquetImage,
+              flowers: arrangedFlowers,
+              message: message,
+              senderName: formData.senderName,
+              recipientName: formData.recipientName
+            })
+          });
+        } catch (dbError) {
+          console.error("Failed to persist to DB, but email was sent.", dbError);
+        }
+        
         setIsSuccess(true);
       } else {
         console.error("Failed to send, ensure server config is correct.");
@@ -140,7 +157,7 @@ export default function SendScreen() {
             className="btn-back"
             onClick={() => router.push('/message')}
           >
-            ← Unseal
+            Unseal
           </button>
           <button
             id="submit-bouquet"
@@ -149,7 +166,7 @@ export default function SendScreen() {
             style={{ flex: 1, padding: '14px 24px', fontSize: '1.2rem' }}
             disabled={isSending || !formData.recipientEmail || !formData.recipientName}
           >
-            {isSending ? "Delivering..." : "Deliver Bouquet 🕊️"}
+            {isSending ? "Delivering..." : "Deliver Bouquet"}
           </button>
         </div>
       </form>

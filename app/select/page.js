@@ -2,6 +2,7 @@
 
 import Image from "next/image";
 import { useRouter } from "next/navigation";
+import { motion } from "framer-motion";
 import styles from "./select.module.css";
 import { useBouquet } from "../context/BouquetContext";
 
@@ -43,7 +44,7 @@ export default function SelectFlowers() {
   const handleRemove = (flower, e) => {
     console.log('[app/select] -> handleRemove Called for', flower.name);
     if (e) e.stopPropagation();
-    removeFlower(flower.name);
+    removeFlower(flower.id);
     console.log('[app/select] -> handleRemove Exited');
   };
 
@@ -61,7 +62,12 @@ export default function SelectFlowers() {
   }, []);
 
   return (
-    <div className={styles.container}>
+    <motion.div 
+      className={styles.container}
+      initial={{ opacity: 0 }}
+      animate={{ opacity: 1 }}
+      transition={{ duration: 0.6 }}
+    >
       <header className={styles.header}>
         <h1 className={styles.title}>Today's Fresh Picks</h1>
         <p className={styles.subtitle}>Pick at least 6—mix them up or go all in on one you love.</p>
@@ -77,7 +83,13 @@ export default function SelectFlowers() {
               className={`${styles.card} ${count > 0 ? styles.selectedCard : ''}`}
             >
               <div className={styles.imageContainer} onClick={(e) => handleAdd(flower, e)}>
-                <Image src={flower.image} alt={flower.name} fill className={styles.image} />
+                <Image 
+                  src={flower.image} 
+                  alt={flower.name} 
+                  fill 
+                  className={styles.image} 
+                  priority={availableFlowers.indexOf(flower) < 4}
+                />
                 <div className={styles.traitOverlay}>
                   <span className={styles.traitText}>{flower.trait}</span>
                 </div>
@@ -100,7 +112,12 @@ export default function SelectFlowers() {
         })}
       </div>
 
-      <div className={styles.bottomBar}>
+      <motion.div 
+        className={styles.bottomBar}
+        initial={{ y: 100 }}
+        animate={{ y: 0 }}
+        transition={{ type: "spring", damping: 25, stiffness: 200 }}
+      >
         <div className={styles.barLeft}>
           <span className={styles.barTitle}>Cart ({selectedCount})</span>
           <div className={styles.selectedStack}>
@@ -130,7 +147,7 @@ export default function SelectFlowers() {
             className="btn-back"
             onClick={() => router.push('/')}
           >
-            ← Back
+            Go Back
           </button>
           <button 
             className="btn-primary"
@@ -140,7 +157,7 @@ export default function SelectFlowers() {
             {selectedCount < 6 ? `Pick ${6 - selectedCount} More...` : "Next: Arrange"}
           </button>
         </div>
-      </div>
-    </div>
+      </motion.div>
+    </motion.div>
   );
 }

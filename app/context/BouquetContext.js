@@ -11,18 +11,18 @@ export function BouquetProvider({ children }) {
   const [selectedGreeneryBase, setSelectedGreeneryBase] = useState(1);
   const [message, setMessage] = useState('');
   const [bouquetImage, setBouquetImage] = useState(null);
-  const [cardTint, setCardTint] = useState({ name: 'Artisan Cream', value: '#FDFCFA' });
-  
+  const [cardTint, setCardTint] = useState({ name: 'Warm Linen', value: '#EDE8DF', description: 'For when you just want to say hello' });
+
   const addFlower = (flower) => {
     console.log('[Context] -> addFlower Called');
     setSelectedFlowers((prev) => [...prev, { ...flower, uid: crypto.randomUUID() }]);
     console.log('[Context] -> addFlower Exited');
   };
 
-  const removeFlower = (name) => {
+  const removeFlower = (id) => {
     console.log('[Context] -> removeFlower Called');
     setSelectedFlowers((prev) => {
-      const index = prev.findIndex(f => f.name === name);
+      const index = prev.findIndex(f => f.uid === id || f.id === id);
       if (index !== -1) {
         const newArr = [...prev];
         newArr.splice(index, 1);

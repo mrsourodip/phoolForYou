@@ -1,11 +1,17 @@
 .container {
   min-height: 100vh;
-  padding: 6rem 4rem;
+  padding: 6rem 2rem;
   display: flex;
   flex-direction: column;
   align-items: center;
-  max-width: 1800px;
+  max-width: 1400px;
   margin: 0 auto;
+}
+
+@media (max-width: 768px) {
+  .container {
+    padding: 4rem 1.5rem;
+  }
 }
 
 /* HERO */
@@ -19,6 +25,21 @@
   font-family: 'Playfair Display', serif;
   margin-bottom: 1rem;
   font-style: italic;
+  color: var(--brand-accent);
+}
+
+@media (max-width: 768px) {
+  .title {
+    font-size: 2.2rem;
+    line-height: 1.2;
+    padding: 0 0.5rem;
+  }
+}
+
+@media (max-width: 480px) {
+  .title {
+    font-size: 1.8rem;
+  }
 }
 
 .subtitle {
@@ -26,6 +47,18 @@
   color: #777;
   font-family: 'Outfit', sans-serif;
   margin-bottom: 2.5rem;
+}
+
+.cursor {
+  display: inline-block;
+  color: #555;
+  margin-left: 2px;
+  animation: blink 0.8s infinite;
+}
+
+@keyframes blink {
+  0%, 100% { opacity: 1; }
+  50% { opacity: 0; }
 }
 
 /* GALLERY */
@@ -47,20 +80,17 @@
 }
 
 .card {
-  background: #efefef;
-  /* light grey like reference */
-  border-radius: 0;
-  /* 🔥 remove rounding */
-  padding: 20px;
-  box-shadow: none;
-  /* 🔥 remove depth */
-  transition: background 0.2s ease;
+  background: var(--card-bg);
+  border-radius: 8px;
+  padding: 24px;
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.03);
+  transition: all 0.25s ease;
 }
 
 .card:hover {
-  transform: translateY(-6px);
-  box-shadow: 0 20px 50px rgba(0, 0, 0, 0.12);
-  background: #e8e8e8;
+  transform: translateY(-8px);
+  box-shadow: 0 30px 60px rgba(0, 0, 0, 0.08);
+  background: #E8E5DC; /* Slightly darker than card-bg for hover */
 }
 
 .imageWrapper {
@@ -98,12 +128,12 @@
   cursor: pointer;
   padding: 0;
   margin-top: 8px;
-  color: var(--text-primary, #111);
-  transition: color 0.25s ease;
+  color: var(--btn-primary-bg);
+  transition: color var(--transition-smooth);
 }
 
 .cartBtn:hover {
-  color: var(--accent-color, #f06);
+  color: var(--brand-accent);
 }
 
 .cartBtn svg {
@@ -120,7 +150,8 @@
 
 @media (max-width: 768px) {
   .grid {
-    grid-template-columns: repeat(2, 1fr);
+    grid-template-columns: 1fr;
+    gap: 20px;
   }
 
   .activeCard {

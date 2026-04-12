@@ -13,6 +13,15 @@
   overflow: hidden;
 }
 
+@media (max-width: 768px) {
+  .container {
+    height: auto;
+    min-height: 100vh;
+    padding: 64px 1rem 2rem 1rem;
+    overflow-y: auto;
+  }
+}
+
 .header {
   text-align: center;
   margin-bottom: 1rem;
@@ -24,9 +33,15 @@
   font-size: 2.8rem;
   font-family: 'Playfair Display', serif;
   margin-bottom: 0.25rem;
-  color: var(--text-primary);
+  color: var(--brand-accent);
   font-weight: 400;
   font-style: italic;
+}
+
+@media (max-width: 768px) {
+  .title {
+    font-size: 2.2rem;
+  }
 }
 
 .subtitle {
@@ -45,11 +60,39 @@
   width: 100%;
 }
 
+@media (max-width: 768px) {
+  .twoColumnGrid {
+    grid-template-columns: 1fr;
+    gap: 3rem;
+    display: flex;
+    flex-direction: column;
+  }
+}
+
 .leftCol {
   display: flex;
   flex-direction: column;
   gap: 1rem;
   min-height: 0;
+}
+
+.leftCol.card {
+  position: relative;
+  background: var(--card-bg);
+  border: 1px solid rgba(0,0,0,0.05);
+  border-radius: 8px;
+  cursor: pointer;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  padding: 1.5rem;
+  transition: all var(--transition-smooth);
+}
+
+@media (max-width: 768px) {
+  .card {
+    padding: 1.5rem;
+  }
 }
 
 .rightCol {
@@ -67,6 +110,25 @@
   width: 100%;
   flex-shrink: 0;
   padding-top: 1rem;
+}
+
+@media (max-width: 768px) {
+  .navRow {
+    position: sticky;
+    bottom: 0;
+    background: var(--bg-color);
+    padding: 1.5rem 1rem;
+    margin: 1rem -1rem -1rem -1rem;
+    border-top: 1px solid rgba(0,0,0,0.05);
+    z-index: 100;
+    flex-direction: column-reverse;
+    gap: 1.25rem;
+    padding-top: 1rem;
+  }
+  
+  .navRow button {
+    width: 100%;
+  }
 }
 
 /* ---------- LABEL ---------- */
@@ -103,6 +165,7 @@
 .colorCircleActive {
   border: 2.5px solid var(--text-primary);
   transform: scale(1.15);
+  box-shadow: 0 0 0 4px rgba(0,0,0,0.05);
 }
 
 /* ---------- CARD ---------- */
@@ -113,11 +176,16 @@
   border: 1px solid rgba(0,0,0,0.08);
   border-radius: 8px;
   padding: 2rem;
-  transition: background 0.4s ease;
+  transition: all 0.3s ease;
   display: flex;
   flex-direction: column;
   align-items: center;
   overflow-y: auto;
+}
+
+.customCard:focus-within {
+  border-color: var(--text-primary);
+  box-shadow: 0 0 0 4px rgba(0, 0, 0, 0.05);
 }
 
 .textarea {
@@ -144,18 +212,26 @@
 .chips {
   display: flex;
   flex-wrap: wrap;
-  gap: 0.5rem;
+  gap: 12px;
+  margin-top: 1rem;
+}
+
+@media (max-width: 768px) {
+  .chips {
+    gap: 8px;
+  }
 }
 
 .chip {
   padding: 8px 14px;
-  border: none;
-  border-radius: 20px;
+  border: 1px solid #D3D1C7;
+  background: #F1EFE8;
+  border-radius: 8px;
   font-size: 0.82rem;
   font-family: 'Outfit', sans-serif;
-  color: #444;
+  color: #444441;
   cursor: pointer;
-  transition: all 0.2s ease;
+  transition: all var(--transition-smooth);
   font-weight: 500;
 }
 
@@ -169,27 +245,29 @@
   display: flex;
   flex-direction: column;
   gap: 0.5rem;
-  background: white;
+  background: var(--card-bg);
   padding: 1.25rem;
-  border: 1.5px solid #e8e8e8;
-  border-radius: 16px;
+  border: 1px solid #D3D1C7;
+  border-radius: 12px;
 }
 
 .aiInput {
   width: 100%;
   padding: 12px 16px;
-  border: 1.5px solid #d0d0d0;
-  border-radius: 10px;
+  border: 1px solid #D3D1C7;
+  border-radius: 8px;
   outline: none;
   font-family: 'Outfit', sans-serif;
   font-size: 0.95rem;
-  background: #fafafa;
-  transition: border-color 0.2s;
+  background: #F1EFE8;
+  transition: border-color var(--transition-smooth);
   line-height: 1.5;
 }
 
 .aiInput:focus {
-  border-color: #FADCB0;
+  border-color: var(--text-primary);
+  background: white;
+  box-shadow: 0 0 0 4px rgba(0, 0, 0, 0.05);
 }
 
 @keyframes fadeInDown {
