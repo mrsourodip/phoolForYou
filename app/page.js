@@ -142,8 +142,6 @@ export default function Home() {
                 className={styles.card}
                 onClick={() => handleSelectPreset(bq)}
               >
-                <h3 className={styles.name}>{label}</h3>
-
                 <div className={styles.imageWrapper}>
                   <Image
                     src={img}
@@ -153,30 +151,25 @@ export default function Home() {
                     unoptimized={!!bq.image_data} // Required for base64
                   />
                 </div>
-
-                <button
-                  className={styles.cartBtn}
-                  onClick={(e) => {
-                    e.stopPropagation();
-                    handleSelectPreset(bq);
-                  }}
-                  aria-label={`Select ${label}`}
-                >
-                  <svg
-                    width="24"
-                    height="24"
-                    viewBox="0 0 24 24"
-                    fill="none"
-                    stroke="currentColor"
-                    strokeWidth="1.5"
-                    strokeLinecap="round"
-                    strokeLinejoin="round"
-                  >
-                    <circle cx="9" cy="20" r="1" />
-                    <circle cx="17" cy="20" r="1" />
-                    <path d="M3 3h2l2.4 12.5a2 2 0 0 0 2 1.5h7.2a2 2 0 0 0 2-1.6L21 7H6" />
-                  </svg>
-                </button>
+                <div className={styles.cardInfo}>
+                  <h3 className={styles.name}>{label}</h3>
+                  <div className={styles.cardFooter}>
+                    <button
+                      className={styles.cartBtn}
+                      onClick={(e) => {
+                        e.stopPropagation();
+                        handleSelectPreset(bq);
+                      }}
+                      aria-label={`Select ${label}`}
+                    >
+                      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2">
+                        <circle cx="9" cy="21" r="1"></circle>
+                        <circle cx="20" cy="21" r="1"></circle>
+                        <path d="M1 1h4l2.68 13.39a2 2 0 0 0 2 1.61h9.72a2 2 0 0 0 2-1.61L23 6H6"></path>
+                      </svg>
+                    </button>
+                  </div>
+                </div>
               </div>
             );
           })}

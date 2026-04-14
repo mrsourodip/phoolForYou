@@ -156,6 +156,27 @@
   font-size: 4rem;
 }
 
+/* ---------- NAV ROW ---------- */
+.navRow {
+  display: flex;
+  gap: 2rem;
+  margin-top: 3rem;
+}
+
+@media (max-width: 768px) {
+  .navRow {
+    flex-direction: column-reverse;
+    align-items: center;
+    gap: 0.75rem;
+    margin-top: 2rem;
+  }
+
+  .navRow button {
+    width: 100%;
+    max-width: 360px;
+  }
+}
+
 @keyframes scaleUp {
   0% { transform: scale(0.8); opacity: 0; }
   100% { transform: scale(1); opacity: 1; }

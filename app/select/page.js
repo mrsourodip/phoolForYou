@@ -49,7 +49,7 @@ export default function SelectFlowers() {
   };
 
   const selectedCount = selectedFlowers.length;
-  
+
   // Group selected flowers for the mini stack
   const selectedGroups = selectedFlowers.reduce((acc, flower) => {
     const existing = acc.find(f => f.name === flower.name);
@@ -62,7 +62,7 @@ export default function SelectFlowers() {
   }, []);
 
   return (
-    <motion.div 
+    <motion.div
       className={styles.container}
       initial={{ opacity: 0 }}
       animate={{ opacity: 1 }}
@@ -76,25 +76,25 @@ export default function SelectFlowers() {
       <div className={styles.grid}>
         {availableFlowers.map((flower) => {
           const count = selectedFlowers.filter(f => f.name === flower.name).length;
-          
+
           return (
-            <div 
-              key={flower.id} 
+            <div
+              key={flower.id}
               className={`${styles.card} ${count > 0 ? styles.selectedCard : ''}`}
             >
               <div className={styles.imageContainer} onClick={(e) => handleAdd(flower, e)}>
-                <Image 
-                  src={flower.image} 
-                  alt={flower.name} 
-                  fill 
-                  className={styles.image} 
+                <Image
+                  src={flower.image}
+                  alt={flower.name}
+                  fill
+                  className={styles.image}
                   priority={availableFlowers.indexOf(flower) < 4}
                 />
                 <div className={styles.traitOverlay}>
                   <span className={styles.traitText}>{flower.trait}</span>
                 </div>
               </div>
-              
+
               <div className={styles.cardFooter}>
                 <p className={styles.flowerName}>{flower.name}</p>
                 {count > 0 ? (
@@ -112,7 +112,7 @@ export default function SelectFlowers() {
         })}
       </div>
 
-      <motion.div 
+      <motion.div
         className={styles.bottomBar}
         initial={{ y: 100 }}
         animate={{ y: 0 }}
@@ -127,13 +127,13 @@ export default function SelectFlowers() {
                 {g.count > 1 && <span className={styles.miniCount}>{g.count}</span>}
               </div>
             ))}
-            {selectedGroups.length > 5 && <span style={{alignSelf: 'center', opacity: 0.6}}>+{selectedGroups.length - 5}</span>}
+            {selectedGroups.length > 5 && <span style={{ alignSelf: 'center', opacity: 0.6 }}>+{selectedGroups.length - 5}</span>}
           </div>
         </div>
-        
-        <div style={{display:'flex', gap:'1rem', alignItems: 'center'}}>
+
+        <div className={styles.barRight}>
           {selectedCount > 0 && (
-            <button 
+            <button
               className="btn-discard"
               onClick={() => {
                 console.log('[app/select] -> Reset Garden Called');
@@ -143,18 +143,18 @@ export default function SelectFlowers() {
               Discard
             </button>
           )}
-          <button 
+          <button
             className="btn-back"
             onClick={() => router.push('/')}
           >
             Go Back
           </button>
-          <button 
+          <button
             className="btn-primary"
             disabled={selectedCount < 6}
             onClick={() => router.push('/arrange')}
           >
-            {selectedCount < 6 ? `Pick ${6 - selectedCount} More...` : "Next: Arrange"}
+            {selectedCount < 6 ? `Pick ${6 - selectedCount} More` : "Arrange"}
           </button>
         </div>
       </motion.div>

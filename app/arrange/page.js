@@ -40,10 +40,15 @@ export default function ArrangeFlowers() {
 
   useEffect(() => {
     const handleResize = () => {
-      if (window.innerWidth < 480) {
-        setStageScale((window.innerWidth - 40) / 420);
-      } else if (window.innerWidth < 768) {
-        setStageScale((window.innerWidth - 80) / 420);
+      // Only apply scaling on mobile resolutions (< 768px)
+      if (window.innerWidth < 768) {
+        const padding = 48; // Increased padding for mobile safety margin
+        const availableWidth = window.innerWidth - padding;
+        if (availableWidth < 420) {
+          setStageScale(availableWidth / 420);
+        } else {
+          setStageScale(1);
+        }
       } else {
         setStageScale(1);
       }
@@ -233,118 +238,126 @@ export default function ArrangeFlowers() {
         {/* RIGHT: The Canvas */}
         <div className={styles.canvasCol}>
           <div 
-            className={styles.canvas} 
-            ref={canvasRef}
-            style={{ transform: `scale(${stageScale})` }}
+            className={styles.canvasContainer}
+            style={{ 
+              width: 420 * stageScale, 
+              height: 510 * stageScale 
+            }}
           >
+            <div 
+              className={styles.canvas} 
+              ref={canvasRef}
+              style={{ 
+                transform: `scale(${stageScale})`,
+                transformOrigin: 'top left'
+              }}
+            >
+              {/* Tutorial overlay */}
+              {showTutorial && (
+                <div className={styles.tutorialOverlay}>
+                  <motion.div 
+                    className={styles.tutorialHint}
+                    initial={{ opacity: 0, scale: 0.8 }}
+                    animate={{ 
+                      opacity: [0, 1, 1, 0],
+                      scale: [0.8, 1, 1, 0.8],
+                      x: [0, 80, 80, 80]
+                    }}
+                    transition={{ 
+                      duration: 3, 
+                      repeat: Infinity,
+                      times: [0, 0.2, 0.8, 1]
+                    }}
+                  >
+                    <div className={styles.ripple} />
+                    <span className={styles.hintText}>
+                      {stageScale < 1 ? "TAP & HOLD TO DRAG" : "DRAG TO ARRANGE"}
+                    </span>
+                  </motion.div>
+                </div>
+              )}
 
-            {/* Tutorial overlay */}
-            {showTutorial && (
-              <div className={styles.tutorialOverlay}>
-                <motion.div 
-                  className={styles.tutorialHint}
-                  initial={{ opacity: 0, scale: 0.8 }}
-                  animate={{ 
-                    opacity: [0, 1, 1, 0],
-                    scale: [0.8, 1, 1, 0.8],
-                    x: [0, 80, 80, 80]
-                  }}
-                  transition={{ 
-                    duration: 3, 
-                    repeat: Infinity,
-                    times: [0, 0.2, 0.8, 1]
-                  }}
-                >
-                  <div className={styles.ripple} />
-                  <span className={styles.hintText}>
-                    {stageScale < 1 ? "TAP & HOLD TO DRAG" : "DRAG TO ARRANGE"}
-                  </span>
-                </motion.div>
-              </div>
-            )}
-
-            {/* Greenery base (only when not "None") */}
-            {hasGreenery && (
-              <div className={styles.greeneryBase}>
-                <Image
-                  src={GREENERY_BASES[selectedGreeneryBase]}
-                  alt="Greenery Base"
-                  fill
-                  style={{ objectFit: 'contain' }}
-                  priority
-                />
-              </div>
-            )}
-
-
-
-            {/* Draggable flowers */}
-            {arranged.map(flower => {
-              const id = flower.uid || flower.id;
-              return (
-                <motion.div
-                  key={id}
-                  className={styles.flowerLayer}
-                  drag
-                  dragMomentum={false}
-                  dragElastic={0.1}
-                  whileDrag={{
-                    scale: 1.3,
-                    cursor: 'grabbing',
-                    filter: 'drop-shadow(0 20px 30px rgba(0,0,0,0.2))'
-                  }}
-                  onPointerDown={() => onPointerDown(id)}
-                  onDragEnd={(e, info) => onFlowerDragEnd(id, info)}
-                  initial={{
-                    x: flower.position.x,
-                    y: flower.position.y,
-                    scale: flower.position.scale,
-                    rotate: flower.position.rot,
-                    opacity: 1
-                  }}
-                  animate={{
-                    x: flower.position.x,
-                    y: flower.position.y,
-                    scale: flower.position.scale,
-                    rotate: flower.position.rot,
-                    opacity: 1
-                  }}
-                  exit={{ 
-                    x: 130, 
-                    y: 150, 
-                    scale: 0.2, 
-                    opacity: 0,
-                    rotate: 15,
-                    transition: { duration: 0.4, ease: "easeIn" } 
-                  }}
-                  transition={{ type: "spring", stiffness: 120, damping: 20 }}
-                  style={{
-                    zIndex: flower.position.z,
-                    left: '175px',
-                    top: '220px',
-                    cursor: 'grab'
-                  }}
-                >
+              {/* Greenery base (only when not "None") */}
+              {hasGreenery && (
+                <div className={styles.greeneryBase}>
                   <Image
-                    className={hasGreenery ? styles.maskedFlower : ''}
-                    src={flower.image}
-                    alt={flower.name}
-                    width={120}
-                    height={120}
-                    style={{ objectFit: 'contain', pointerEvents: 'none' }}
-                    draggable={false}
+                    src={GREENERY_BASES[selectedGreeneryBase]}
+                    alt="Greenery Base"
+                    fill
+                    style={{ objectFit: 'contain' }}
+                    priority
                   />
-                </motion.div>
-              );
-            })}
+                </div>
+              )}
 
-            {/* The Flower Stand (Removal Zone) - Hide during capture */}
-            {!isCapturing && (
-              <div className={styles.flowerStand}>
-                <div className={styles.standIcon}>🧺</div>
-                <div className={styles.standLabel}>Stand</div>
-              </div>
-            )}
+              {/* Draggable flowers */}
+              {arranged.map(flower => {
+                const id = flower.uid || flower.id;
+                return (
+                  <motion.div
+                    key={id}
+                    className={styles.flowerLayer}
+                    drag
+                    dragMomentum={false}
+                    dragElastic={0.1}
+                    whileDrag={{
+                      scale: 1.3,
+                      cursor: 'grabbing',
+                      filter: 'drop-shadow(0 20px 30px rgba(0,0,0,0.2))'
+                    }}
+                    onPointerDown={() => onPointerDown(id)}
+                    onDragEnd={(e, info) => onFlowerDragEnd(id, info)}
+                    initial={{
+                      x: flower.position.x,
+                      y: flower.position.y,
+                      scale: flower.position.scale,
+                      rotate: flower.position.rot,
+                      opacity: 1
+                    }}
+                    animate={{
+                      x: flower.position.x,
+                      y: flower.position.y,
+                      scale: flower.position.scale,
+                      rotate: flower.position.rot,
+                      opacity: 1
+                    }}
+                    exit={{ 
+                      x: 130, 
+                      y: 150, 
+                      scale: 0.2, 
+                      opacity: 0,
+                      rotate: 15,
+                      transition: { duration: 0.4, ease: "easeIn" } 
+                    }}
+                    transition={{ type: "spring", stiffness: 120, damping: 20 }}
+                    style={{
+                      zIndex: flower.position.z,
+                      left: '175px',
+                      top: '220px',
+                      cursor: 'grab'
+                    }}
+                  >
+                    <Image
+                      className={hasGreenery ? styles.maskedFlower : ''}
+                      src={flower.image}
+                      alt={flower.name}
+                      width={120}
+                      height={120}
+                      style={{ objectFit: 'contain', pointerEvents: 'none' }}
+                      draggable={false}
+                    />
+                  </motion.div>
+                );
+              })}
+
+              {/* The Flower Stand (Removal Zone) - Hide during capture */}
+              {!isCapturing && (
+                <div className={styles.flowerStand}>
+                  <div className={styles.standIcon}>🧺</div>
+                  <div className={styles.standLabel}>Stand</div>
+                </div>
+              )}
+            </div>
           </div>
         </div>
       </div>

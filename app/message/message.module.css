@@ -53,11 +53,18 @@
 /* ---------- MAIN SPLIT ---------- */
 .twoColumnGrid {
   display: grid;
-  grid-template-columns: 1fr 320px;
+  grid-template-columns: 1fr 360px;
   gap: 3rem;
   flex: 1;
   min-height: 0;
   width: 100%;
+}
+
+@media (max-width: 1024px) {
+  .twoColumnGrid {
+    grid-template-columns: 1fr;
+    align-items: center; /* Fix elongation on tablet/mobile */
+  }
 }
 
 @media (max-width: 768px) {
@@ -117,17 +124,21 @@
     position: sticky;
     bottom: 0;
     background: var(--bg-color);
-    padding: 1.5rem 1rem;
-    margin: 1rem -1rem -1rem -1rem;
-    border-top: 1px solid rgba(0,0,0,0.05);
+    padding: 1.5rem 0;
+    margin: 1rem 0 0 0;
+    width: 100%;
+    border-top: 1px solid rgba(114, 36, 62, 0.1);
     z-index: 100;
     flex-direction: column-reverse;
+    align-items: center;
+    justify-content: center; /* Center on mobile */
     gap: 1.25rem;
     padding-top: 1rem;
   }
   
   .navRow button {
     width: 100%;
+    max-width: 360px; /* Consistent with other forms */
   }
 }
 
@@ -171,16 +182,25 @@
 /* ---------- CARD ---------- */
 .customCard {
   flex: 1;
-  min-height: 0;
   width: 100%;
   border: 1px solid rgba(0,0,0,0.08);
-  border-radius: 8px;
-  padding: 2rem;
+  border-radius: 12px;
+  padding: 3rem;
   transition: all 0.3s ease;
   display: flex;
   flex-direction: column;
   align-items: center;
   overflow-y: auto;
+  box-shadow: 0 4px 20px rgba(0,0,0,0.02);
+}
+
+@media (max-width: 1024px) {
+  .customCard {
+    flex: none;
+    max-width: 480px;
+    min-height: 400px;
+    margin: 0 auto;
+  }
 }
 
 .customCard:focus-within {

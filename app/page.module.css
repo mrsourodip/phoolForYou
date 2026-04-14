@@ -80,60 +80,91 @@
 }
 
 .card {
-  background: var(--card-bg);
-  border-radius: 8px;
-  padding: 24px;
-  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.03);
-  transition: all 0.25s ease;
+  position: relative;
+  background: #EFEBE3;
+  border-radius: 16px;
+  padding: 16px;
+  display: flex;
+  flex-direction: column;
+  aspect-ratio: 3 / 4;
+  overflow: hidden;
+  cursor: pointer;
+  transition: all 150ms ease;
+  border: 1.5px solid transparent; /* placeholder for active state */
 }
 
 .card:hover {
-  transform: translateY(-8px);
-  box-shadow: 0 30px 60px rgba(0, 0, 0, 0.08);
-  background: #E8E5DC; /* Slightly darker than card-bg for hover */
+  background: #E8E2D8;
+  transform: translateY(-4px);
+  box-shadow: 0 12px 30px rgba(0, 0, 0, 0.06);
+}
+
+/* Active state for selection if needed */
+.cardActive {
+  border-color: #72243E;
 }
 
 .imageWrapper {
   position: relative;
+  flex: 1;
   width: 100%;
-  height: 220px;
-  background: transparent;
-  /* remove inner box look */
-  margin-bottom: 20px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  margin-bottom: 12px;
 }
 
 .cardImage {
+  width: 80% !important;
+  height: 80% !important;
+  position: relative !important;
   object-fit: contain;
-  object-position: center;
+}
+
+.cardInfo {
+  margin-top: auto;
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+}
+
+.name {
+  font-family: 'Outfit', sans-serif;
+  font-size: 11px;
+  font-weight: 500;
+  color: #2C2C2A;
+  text-transform: uppercase;
+  letter-spacing: 0.1em;
+  margin: 0;
 }
 
 .cardFooter {
   display: flex;
-  justify-content: space-between;
+  justify-content: flex-end;
   align-items: center;
-}
-
-.name {
-  font-family: 'Outfit', monospace;
-  font-size: 0.85rem;
-  letter-spacing: 0.15em;
-  text-transform: uppercase;
-  color: #222;
+  padding: 10px 0 0 0;
+  border-top: 0.5px solid #D3D1C7;
+  width: 100%;
 }
 
 .cartBtn {
-  align-self: flex-end;
   background: transparent;
   border: none;
   cursor: pointer;
   padding: 0;
-  margin-top: 8px;
-  color: var(--btn-primary-bg);
-  transition: color var(--transition-smooth);
+  color: #72243E;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 32px;
+  height: 32px;
+  border-radius: 50%;
+  transition: all 150ms ease;
 }
 
-.cartBtn:hover {
-  color: var(--brand-accent);
+.card:hover .cartBtn {
+  background: #72243E;
+  color: #FBEAF0;
 }
 
 .cartBtn svg {

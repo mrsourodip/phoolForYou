@@ -150,7 +150,7 @@ export default function SendScreen() {
           />
         </div>
 
-        <div style={{ display: 'flex', gap: '2rem', marginTop: '3rem' }}>
+        <div className={styles.navRow}>
           <button
             id="nav-back-send"
             type="button"
